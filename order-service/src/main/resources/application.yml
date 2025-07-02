@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: postgres
+    password: database
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  order:
+    exchange: order-exchange
+    routingKey: order-created-route
+    stockRejectedQueue: stock-rejected-queue
+    stockRejectedRoutingKey: stock-rejected-route
+    paymentConfirmedQueue: payment-confirmed-queue
+    paymentConfirmedRoutingKey: payment-confirmed-route
+    paymentFailedQueue: payment-failed-queue
+    paymentFailedRoutingKey: payment-failed-route
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+
+logging:
+  file:
+    name: logs/order-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
