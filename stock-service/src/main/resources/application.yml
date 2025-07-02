@@ -1,0 +1,55 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: stock-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stockdb
+    username: postgres
+    password: database
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  stock:
+    exchange: order-exchange
+    deadLetterExchange: order-exchange-dlx
+    orderCreatedQueue: order-created-queue
+    orderCreatedDlqQueue: order-created-dlq
+    orderCreatedRoutingKey: order-created-route
+    orderCreatedDlqRoutingKey: order-created-dlq-route
+    reservedRoutingKey: stock-reserved-route
+    rejectedRoutingKey: stock-rejected-route
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+
+logging:
+  file:
+    name: logs/stock-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
